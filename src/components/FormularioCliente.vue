@@ -1,4 +1,4 @@
-// src/components/FormularioCliente.vue
+<!-- src/components/FormularioCliente.vue -->
 <template>
   <q-form ref="formRef" @submit.prevent="salvarCliente">
     <!-- Campo: Nome -->
@@ -36,6 +36,19 @@
 <script setup>
 import { reactive, ref } from 'vue'
 
+// Referência interna do formulário
+const formRef = ref(null)
+
+// Expõe o método submit para o componente pai
+defineExpose({
+  submit() {
+    formRef.value?.validate().then((valid) => {
+      if (valid) salvarCliente()
+    })
+  },
+})
+
+// Props com dados iniciais do cliente
 const props = defineProps({
   cliente: {
     type: Object,
@@ -52,17 +65,10 @@ const props = defineProps({
 
 const emit = defineEmits(['salvar'])
 const form = reactive({ ...props.cliente })
-const formRef = ref(null)
 
 function salvarCliente() {
   emit('salvar', { ...form, id: props.cliente.id })
 }
-
-defineExpose({
-  submit() {
-    formRef.value?.submit()
-  },
-})
 </script>
 
 <style scoped></style>
