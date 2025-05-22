@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # LojaJocenir (loja-da-jocenir)
 
 App para administração de uma lojinha multimarcas bem informal mas digna do esforço.
@@ -38,3 +39,7 @@ quasar build
 
 ### Customize the configuration
 See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).
+=======
+# loja-da-jocenir
+App para administração interna da lojinha multimarcas da tia Jocenir.
+>>>>>>> 638bb664deff03e24a031f70bcd5247c1913e86a

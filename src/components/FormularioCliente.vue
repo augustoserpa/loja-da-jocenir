@@ -36,7 +36,6 @@
 <script setup>
 import { reactive, ref } from 'vue'
 
-// Props com dados iniciais do cliente (para edição)
 const props = defineProps({
   cliente: {
     type: Object,
@@ -59,7 +58,11 @@ function salvarCliente() {
   emit('salvar', { ...form, id: props.cliente.id })
 }
 
-defineExpose({ form: formRef })
+defineExpose({
+  submit() {
+    formRef.value?.submit()
+  },
+})
 </script>
 
 <style scoped></style>

@@ -31,7 +31,7 @@ function salvar(dados) {
 }
 
 function salvarManual() {
-  formulario.value?.$refs.form.submit()
+  formulario.value?.submit()
 }
 
 function voltar() {
