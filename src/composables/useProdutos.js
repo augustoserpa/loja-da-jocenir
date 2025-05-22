@@ -14,7 +14,7 @@ const produtos = ref([
     publicoAlvo: 'Adultos e adolescentes',
     observacoes: 'Muito procurado no inverno.',
     precoCustoHistorico: [{ data: '2025-02-01', preco: 9.5, quantidade: 12 }],
-    imagemMiniatura: '',
+    imagemMiniatura: 'https://via.placeholder.com/70x70?text=Lavanda',
     imagemDetalhadaUrl: '',
   },
   {
@@ -30,7 +30,7 @@ const produtos = ref([
     publicoAlvo: 'Feminino',
     observacoes: 'Fragrância suave e de longa duração.',
     precoCustoHistorico: [{ data: '2025-01-20', preco: 32.0, quantidade: 8 }],
-    imagemMiniatura: '',
+    imagemMiniatura: 'https://picsum.photos/70?random=2',
     imagemDetalhadaUrl: '',
   },
   {

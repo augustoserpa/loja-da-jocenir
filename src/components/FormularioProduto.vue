@@ -1,5 +1,5 @@
 <template>
-  <q-form @submit.prevent="salvarProduto">
+  <q-form @submit.prevent="salvar">
     <!-- Nome do Produto -->
     <q-input filled v-model="produto.nome" label="Nome do Produto" class="q-mb-md" required />
 
@@ -76,23 +76,17 @@
       type="textarea"
       class="q-mb-md"
     />
-
-    <!-- Botão de Salvar -->
-    <q-btn label="Salvar Produto" type="submit" color="primary" class="full-width" />
   </q-form>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import { useProdutos } from 'src/composables/useProdutos'
+import { ref, onMounted, defineExpose } from 'vue'
 
 const props = defineProps({
   produtoExistente: Object,
 })
 
-const router = useRouter()
-const { adicionarProduto, atualizarProduto } = useProdutos()
+const emit = defineEmits(['salvar'])
 
 const produto = ref({
   id: '',
@@ -117,12 +111,12 @@ onMounted(() => {
   }
 })
 
-function salvarProduto() {
-  if (props.produtoExistente) {
-    atualizarProduto(produto.value.id, produto.value)
-  } else {
-    adicionarProduto({ ...produto.value }, estoqueInicial.value)
-  }
-  router.push('/produtos')
+function salvar() {
+  emit('salvar', {
+    produto: produto.value,
+    estoqueInicial: estoqueInicial.value,
+  })
 }
+
+defineExpose({ salvar })
 </script>

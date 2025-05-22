@@ -29,6 +29,7 @@
         @editar="editarProduto"
         @ver-detalhes="verDetalhes"
         @remover="removerProdutoLocal"
+        @ajustar-estoque="ajustarEstoque"
       />
     </div>
 
@@ -66,6 +67,13 @@ function verDetalhes(id) {
 
 function removerProdutoLocal(id) {
   removerProdutoOriginal(id)
+}
+
+function ajustarEstoque({ id, quantidade }) {
+  const produto = produtos.value.find((p) => p.id === id)
+  if (produto) {
+    produto.estoqueAtual += quantidade
+  }
 }
 </script>
 

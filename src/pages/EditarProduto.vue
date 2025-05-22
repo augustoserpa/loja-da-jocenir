@@ -1,40 +1,58 @@
 <template>
-  <q-page padding>
-    <h5>Editar Produto</h5>
-    <FormularioProduto v-if="produto" :produtoExistente="produto" />
+  <q-page class="q-pa-md">
+    <!-- Cabeçalho com título e botões -->
+    <div class="row items-center justify-between q-mb-md">
+      <div class="text-h5 text-bold amatic-font">Editar Produto</div>
+      <div class="q-gutter-sm">
+        <q-btn flat label="Cancelar" color="negative" @click="voltar" />
+        <q-btn label="Salvar" color="primary" @click="salvarManual" />
+      </div>
+    </div>
+
+    <!-- Formulário com dados carregados -->
+    <FormularioProduto
+      v-if="produto"
+      ref="formulario"
+      :produto-existente="produto"
+      @salvar="salvar"
+      @cancelar="voltar"
+    />
     <div v-else>Carregando produto...</div>
   </q-page>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import FormularioProduto from 'src/components/FormularioProduto.vue'
+import { useProdutos } from 'src/composables/useProdutos'
 
-// Simulação de função para buscar produto (depois será substituído por lógica real)
-function buscarProdutoPorId() {
-  // Aqui você consultaria IndexedDB, Firebase ou um array local
-  return {
-    id: '7891234567890',
-    nome: 'Shampoo Hidratante',
-    categoria: 'Cabelos',
-    marca: 'Marca X',
-    unidade: 'Frasco 400ml',
-    precoVenda: 39.9,
-    validade: '2026-06-01',
-    composicao: 'Extrato de camomila, óleo de argan',
-    publicoAlvo: 'Adultos com cabelos ressecados',
-    observacoes: 'Clientes elogiam o aroma.',
-    imagemMiniatura: '',
-    imagemDetalhadaUrl: '',
-  }
-}
-
-const route = useRoute()
+const formulario = ref(null)
 const produto = ref(null)
+const route = useRoute()
+const router = useRouter()
+const { buscarProdutoPorId, atualizarProduto } = useProdutos()
 
 onMounted(() => {
-  const id = route.params.id
-  produto.value = buscarProdutoPorId(id)
+  produto.value = buscarProdutoPorId(route.params.id)
 })
+
+function salvar(dados) {
+  atualizarProduto(dados.produto.id, dados.produto)
+  voltar()
+}
+
+function salvarManual() {
+  formulario.value?.salvar()
+}
+
+function voltar() {
+  router.push('/produtos')
+}
 </script>
+
+<style scoped>
+.amatic-font {
+  font-family: 'Amatic SC', cursive;
+}
+</style>
