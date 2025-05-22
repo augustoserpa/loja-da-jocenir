@@ -19,30 +19,23 @@
               <div class="text-caption text-grey">{{ produto.unidade }}</div>
             </div>
 
-            <!-- Botão de menu de ações -->
-            <q-btn flat round icon="more_vert" @click="menuAberto = true">
-              <q-menu v-model="menuAberto">
+            <!-- Menu de ações -->
+            <q-btn flat round icon="more_vert">
+              <q-menu auto-close>
                 <q-list>
-                  <!-- Ver detalhes -->
-                  <q-item clickable v-close-popup @click="$emit('ver-detalhes', produto.id)">
+                  <q-item clickable @click="$emit('ver-detalhes', produto.id)">
                     <q-item-section avatar><q-icon name="visibility" /></q-item-section>
                     <q-item-section>Ver</q-item-section>
                   </q-item>
-
-                  <!-- Editar -->
-                  <q-item clickable v-close-popup @click="$emit('editar', produto.id)">
+                  <q-item clickable @click="$emit('editar', produto.id)">
                     <q-item-section avatar><q-icon name="edit" /></q-item-section>
                     <q-item-section>Editar</q-item-section>
                   </q-item>
-
-                  <!-- Ajustar estoque -->
-                  <q-item clickable v-close-popup @click="abrirDialogoAjuste">
+                  <q-item clickable @click="abrirDialogoAjuste">
                     <q-item-section avatar><q-icon name="inventory" /></q-item-section>
                     <q-item-section>Ajustar Estoque</q-item-section>
                   </q-item>
-
-                  <!-- Remover -->
-                  <q-item clickable v-close-popup @click="$emit('remover', produto.id)">
+                  <q-item clickable @click="$emit('remover', produto.id)">
                     <q-item-section avatar><q-icon name="delete" /></q-item-section>
                     <q-item-section>Remover</q-item-section>
                   </q-item>
@@ -93,7 +86,6 @@ const props = defineProps({
 
 const emit = defineEmits(['ver-detalhes', 'editar', 'remover', 'ajustar-estoque'])
 
-const menuAberto = ref(false)
 const mostrarDialogo = ref(false)
 const ajuste = ref(0)
 

@@ -1,64 +1,70 @@
-// src/pages/DetalhesProduto.vue
-
 <template>
-  <q-page padding>
-    <h5 class="q-mb-md">Detalhes do Produto</h5>
+  <q-page class="q-pa-md">
+    <q-card flat bordered class="q-pa-lg">
+      <!-- Cabeçalho com título e botão de voltar -->
+      <q-card-section class="row items-center justify-between q-mb-md">
+        <div class="text-h5 text-bold amatic-font">Detalhes do Produto</div>
+        <q-btn flat dense icon="arrow_back" label="Voltar" @click="voltar" />
+      </q-card-section>
 
-    <q-card v-if="produto" class="q-pa-md">
+      <q-separator class="q-my-sm" />
+
       <!-- Nome e imagem -->
-      <div class="row items-center q-mb-md">
+      <q-card-section class="row items-center q-mb-md">
         <div class="col">
           <div class="text-h6">{{ produto.nome }}</div>
-          <div class="text-subtitle2 text-grey">ID: {{ produto.id }}</div>
+          <div class="text-subtitle2 text-grey">Código: {{ produto.id }}</div>
         </div>
         <q-avatar square size="100px">
           <img :src="produto.imagemMiniatura || placeholderImagem" alt="Imagem do Produto" />
         </q-avatar>
-      </div>
+      </q-card-section>
 
       <!-- Informações principais -->
-      <q-list bordered class="q-mb-md">
-        <q-item>
-          <q-item-section><strong>Categoria:</strong> {{ produto.categoria }}</q-item-section>
-        </q-item>
-        <q-item>
-          <q-item-section><strong>Marca:</strong> {{ produto.marca }}</q-item-section>
-        </q-item>
-        <q-item>
-          <q-item-section><strong>Unidade:</strong> {{ produto.unidade }}</q-item-section>
-        </q-item>
-        <q-item>
-          <q-item-section>
-            <strong>Preço de Revenda:</strong> R$ {{ produto.precoVenda.toFixed(2) }}
-          </q-item-section>
-        </q-item>
-        <q-item>
-          <q-item-section>
-            <strong>Estoque Atual:</strong> {{ produto.estoqueAtual }}
-          </q-item-section>
-        </q-item>
-        <q-item v-if="produto.validade">
-          <q-item-section><strong>Validade:</strong> {{ produto.validade }}</q-item-section>
-        </q-item>
-        <q-item v-if="produto.publicoAlvo">
-          <q-item-section><strong>Público-alvo:</strong> {{ produto.publicoAlvo }}</q-item-section>
-        </q-item>
-      </q-list>
+      <q-card-section class="q-gutter-md">
+        <div>
+          <q-icon name="category" class="q-mr-sm" /> <strong>Categoria:</strong>
+          {{ produto.categoria }}
+        </div>
+        <div>
+          <q-icon name="branding_watermark" class="q-mr-sm" /> <strong>Marca:</strong>
+          {{ produto.marca }}
+        </div>
+        <div>
+          <q-icon name="precision_manufacturing" class="q-mr-sm" /> <strong>Unidade:</strong>
+          {{ produto.unidade }}
+        </div>
+        <div>
+          <q-icon name="attach_money" class="q-mr-sm" /> <strong>Preço de Revenda:</strong> R$
+          {{ produto.precoVenda.toFixed(2) }}
+        </div>
+        <div>
+          <q-icon name="inventory" class="q-mr-sm" /> <strong>Estoque Atual:</strong>
+          {{ produto.estoqueAtual }}
+        </div>
+        <div v-if="produto.validade">
+          <q-icon name="event" class="q-mr-sm" /> <strong>Validade:</strong> {{ produto.validade }}
+        </div>
+        <div v-if="produto.publicoAlvo">
+          <q-icon name="groups" class="q-mr-sm" /> <strong>Público-alvo:</strong>
+          {{ produto.publicoAlvo }}
+        </div>
+      </q-card-section>
 
       <!-- Composição e observações -->
-      <div v-if="produto.composicao" class="q-mb-md">
-        <strong>Composição:</strong>
+      <q-card-section v-if="produto.composicao">
+        <q-icon name="science" class="q-mr-sm" /> <strong>Composição:</strong>
         <p>{{ produto.composicao }}</p>
-      </div>
+      </q-card-section>
 
-      <div v-if="produto.observacoes">
-        <strong>Observações:</strong>
+      <q-card-section v-if="produto.observacoes">
+        <q-icon name="note" class="q-mr-sm" /> <strong>Observações:</strong>
         <p>{{ produto.observacoes }}</p>
-      </div>
+      </q-card-section>
 
-      <!-- Histórico de preços de aquisição -->
-      <div v-if="produto.precoCustoHistorico?.length" class="q-mt-md">
-        <strong>Histórico de Preços de Aquisição:</strong>
+      <!-- Histórico de custo -->
+      <q-card-section v-if="produto.precoCustoHistorico?.length">
+        <q-icon name="history" class="q-mr-sm" /> <strong>Histórico de Preços de Aquisição:</strong>
         <q-list bordered>
           <q-item v-for="(item, index) in produto.precoCustoHistorico" :key="index">
             <q-item-section>
@@ -66,44 +72,34 @@
             </q-item-section>
           </q-item>
         </q-list>
-      </div>
+      </q-card-section>
     </q-card>
-
-    <div v-else>Carregando produto...</div>
   </q-page>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
-
-// Simulação de busca — substituir pelo useProdutos no futuro
-function buscarProdutoPorId() {
-  return {
-    id: '7891234567890',
-    nome: 'Shampoo Hidratante',
-    categoria: 'Cabelos',
-    marca: 'Marca X',
-    unidade: 'Frasco 400ml',
-    precoVenda: 39.9,
-    estoqueAtual: 20,
-    validade: '2026-06-01',
-    composicao: 'Extrato de camomila, óleo de argan',
-    publicoAlvo: 'Adultos com cabelos ressecados',
-    observacoes: 'Clientes elogiam o aroma.',
-    precoCustoHistorico: [
-      { data: '2025-01-10', preco: 25.0, quantidade: 10 },
-      { data: '2025-03-15', preco: 27.0, quantidade: 15 },
-    ],
-    imagemMiniatura: '',
-  }
-}
+import { useRoute, useRouter } from 'vue-router'
+import { useProdutos } from 'src/composables/useProdutos'
 
 const route = useRoute()
+const router = useRouter()
+const { buscarProdutoPorId } = useProdutos()
+
 const produto = ref(null)
 const placeholderImagem = 'https://via.placeholder.com/100x100?text=Produto'
 
 onMounted(() => {
   produto.value = buscarProdutoPorId(route.params.id)
 })
+
+function voltar() {
+  router.push('/produtos')
+}
 </script>
+
+<style scoped>
+.amatic-font {
+  font-family: 'Amatic SC', cursive;
+}
+</style>
