@@ -1,0 +1,31 @@
+// src/css/tema.scss
+@import url('https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&display=swap');
+
+// Fonte personalizada
+.amatic-font {
+  font-family: 'Amatic SC', cursive;
+}
+
+// Cores da paleta retrô
+$verde-oliva: #a2a183;
+$verde-musgo: #686230;
+$marrom-avermelhado: #8c4d2e;
+$bege-claro: #ede6d5;
+$creme: #f5f5dc;
+
+// Classes utilitárias
+.bg-verde-oliva {
+  background-color: $verde-oliva !important;
+}
+
+.bg-verde-musgo {
+  background-color: $verde-musgo !important;
+}
+
+.bg-marrom {
+  background-color: $marrom-avermelhado !important;
+}
+
+.text-creme {
+  color: $creme !important;
+}
