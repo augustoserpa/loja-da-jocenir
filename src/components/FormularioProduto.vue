@@ -26,19 +26,21 @@
       class="q-mb-md"
     />
 
-    <!-- Preço de Venda -->
+    <!-- Preço de Venda (somente na criação) -->
     <q-input
+      v-if="!modoEdicao"
       filled
       v-model.number="produto.precoVenda"
       type="number"
       label="Preço de Revenda"
-      class="q-mb-md"
       prefix="R$"
+      class="q-mb-md"
       required
     />
 
-    <!-- Estoque Inicial -->
+    <!-- Estoque Inicial (somente na criação) -->
     <q-input
+      v-if="!modoEdicao"
       filled
       v-model.number="estoqueInicial"
       type="number"
@@ -46,8 +48,9 @@
       class="q-mb-md"
     />
 
-    <!-- Validade -->
+    <!-- Validade (somente na criação) -->
     <q-input
+      v-if="!modoEdicao"
       filled
       v-model="produto.validade"
       label="Data de Validade"
@@ -84,6 +87,10 @@ import { ref, onMounted, defineExpose } from 'vue'
 
 const props = defineProps({
   produtoExistente: Object,
+  modoEdicao: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const emit = defineEmits(['salvar'])

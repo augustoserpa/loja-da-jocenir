@@ -14,6 +14,7 @@
       v-if="produto"
       ref="formulario"
       :produto-existente="produto"
+      :modo-edicao="true"
       @salvar="salvar"
       @cancelar="voltar"
     />
