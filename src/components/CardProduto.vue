@@ -31,7 +31,7 @@
                     <q-item-section avatar><q-icon name="edit" /></q-item-section>
                     <q-item-section>Editar</q-item-section>
                   </q-item>
-                  <q-item clickable @click="abrirDialogoAjuste">
+                  <q-item clickable @click="irParaAjusteEstoque">
                     <q-item-section avatar><q-icon name="inventory" /></q-item-section>
                     <q-item-section>Ajustar Estoque</q-item-section>
                   </q-item>
@@ -46,49 +46,13 @@
         </div>
       </div>
     </q-card-section>
-
-    <!-- Diálogo de ajuste de estoque -->
-    <q-dialog v-model="mostrarDialogo">
-      <q-card style="min-width: 320px">
-        <q-card-section>
-          <div class="text-h6 amatic-font">Ajustar Estoque</div>
-          <div class="text-caption text-negative q-mt-xs">
-            O valor será somado (positivo) ou subtraído (negativo) do estoque atual.
-          </div>
-        </q-card-section>
-
-        <q-card-section>
-          <q-input v-model.number="ajuste" type="number" filled dense label="Quantidade a ajustar">
-            <template v-slot:prepend>
-              <q-btn round dense flat icon="remove" @click="ajuste--" />
-            </template>
-            <template v-slot:append>
-              <q-btn round dense flat icon="add" @click="ajuste++" />
-            </template>
-          </q-input>
-
-          <q-input
-            v-model="motivo"
-            type="textarea"
-            filled
-            dense
-            label="Motivo do ajuste (opcional)"
-            class="q-mt-md"
-            autogrow
-          />
-        </q-card-section>
-
-        <q-card-actions align="right">
-          <q-btn flat label="Cancelar" color="negative" v-close-popup />
-          <q-btn flat label="Confirmar" color="primary" @click="confirmarAjuste" />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
   </q-card>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const props = defineProps({
   produto: {
@@ -97,37 +61,14 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['ver-detalhes', 'editar', 'remover', 'ajustar-estoque'])
-
-const mostrarDialogo = ref(false)
-const ajuste = ref(0)
-
 const placeholderImagem = 'https://via.placeholder.com/70x70?text=Produto'
 
-function abrirDialogoAjuste() {
-  mostrarDialogo.value = true
-}
-
-function confirmarAjuste() {
-  if (ajuste.value !== 0) {
-    emit('ajustar-estoque', { id: props.produto.id, quantidade: ajuste.value })
-    ajuste.value = 0
-  }
-  mostrarDialogo.value = false
+function irParaAjusteEstoque() {
+  router.push(`/produtos/ajuste/${props.produto.id}`)
 }
 </script>
 
 <style scoped>
-/* Remove as flechinhas do input de número em navegadores */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-input[type='number'] {
-  -moz-appearance: textfield; /* Firefox */
-  appearance: textfield;
-}
 .text-h6 {
   font-weight: bold;
 }

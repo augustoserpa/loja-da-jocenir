@@ -76,7 +76,10 @@ export function useProdutos() {
     return produtos.value.find((p) => p.id === id) || null
   }
 
-  function ajustarEstoque(id, quantidade, motivo = '') {
+  function registrarAjusteEstoque(
+    id,
+    { quantidade, motivo = '', precoCompra, precoRevenda, validade },
+  ) {
     const produto = produtos.value.find((p) => p.id === id)
     if (!produto) return
 
@@ -90,7 +93,27 @@ export function useProdutos() {
       data: new Date().toISOString().split('T')[0],
       quantidade,
       motivo,
+      precoCompra,
+      precoRevenda,
+      validade,
     })
+
+    if (precoRevenda !== undefined) {
+      produto.precoVenda = precoRevenda
+    }
+
+    if (precoCompra !== undefined) {
+      if (!produto.precoCustoHistorico) produto.precoCustoHistorico = []
+      produto.precoCustoHistorico.push({
+        data: new Date().toISOString().split('T')[0],
+        preco: precoCompra,
+        quantidade,
+      })
+    }
+
+    if (validade) {
+      produto.validade = validade
+    }
   }
 
   return {
@@ -100,6 +123,6 @@ export function useProdutos() {
     atualizarProduto,
     removerProduto,
     buscarProdutoPorId,
-    ajustarEstoque,
+    registrarAjusteEstoque,
   }
 }
