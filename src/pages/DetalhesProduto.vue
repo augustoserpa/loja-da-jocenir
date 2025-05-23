@@ -9,69 +9,99 @@
 
       <q-separator class="q-my-sm" />
 
-      <!-- Nome e imagem -->
-      <q-card-section class="row items-center q-mb-md">
-        <div class="col">
-          <div class="text-h6">{{ produto.nome }}</div>
-          <div class="text-subtitle2 text-grey">Código: {{ produto.id }}</div>
+      <q-card-section v-if="produto">
+        <div class="q-mb-md">
+          <q-icon name="info" class="q-mr-sm" /><strong>Nome:</strong> {{ produto.nome }}
         </div>
-        <q-avatar square size="100px">
-          <img :src="produto.imagemMiniatura || placeholderImagem" alt="Imagem do Produto" />
-        </q-avatar>
-      </q-card-section>
-
-      <!-- Informações principais -->
-      <q-card-section class="q-gutter-md">
-        <div>
-          <q-icon name="category" class="q-mr-sm" /> <strong>Categoria:</strong>
+        <div class="q-mb-md">
+          <q-icon name="confirmation_number" class="q-mr-sm" /><strong>Código:</strong>
+          {{ produto.id }}
+        </div>
+        <div class="q-mb-md">
+          <q-icon name="category" class="q-mr-sm" /><strong>Categoria:</strong>
           {{ produto.categoria }}
         </div>
-        <div>
-          <q-icon name="branding_watermark" class="q-mr-sm" /> <strong>Marca:</strong>
+        <div class="q-mb-md">
+          <q-icon name="branding_watermark" class="q-mr-sm" /><strong>Marca:</strong>
           {{ produto.marca }}
         </div>
-        <div>
-          <q-icon name="precision_manufacturing" class="q-mr-sm" /> <strong>Unidade:</strong>
+        <div class="q-mb-md">
+          <q-icon name="precision_manufacturing" class="q-mr-sm" /><strong>Unidade:</strong>
           {{ produto.unidade }}
         </div>
-        <div>
-          <q-icon name="attach_money" class="q-mr-sm" /> <strong>Preço de Revenda:</strong> R$
+        <div class="q-mb-md">
+          <q-icon name="attach_money" class="q-mr-sm" /><strong>Preço de Revenda:</strong> R$
           {{ produto.precoVenda.toFixed(2) }}
         </div>
-        <div>
-          <q-icon name="inventory" class="q-mr-sm" /> <strong>Estoque Atual:</strong>
+        <div class="q-mb-md">
+          <q-icon name="inventory" class="q-mr-sm" /><strong>Estoque Atual:</strong>
           {{ produto.estoqueAtual }}
         </div>
-        <div v-if="produto.validade">
-          <q-icon name="event" class="q-mr-sm" /> <strong>Validade:</strong> {{ produto.validade }}
+        <div class="q-mb-md" v-if="produto.validade">
+          <q-icon name="event" class="q-mr-sm" /><strong>Validade:</strong> {{ produto.validade }}
         </div>
-        <div v-if="produto.publicoAlvo">
-          <q-icon name="groups" class="q-mr-sm" /> <strong>Público-alvo:</strong>
+        <div class="q-mb-md" v-if="produto.publicoAlvo">
+          <q-icon name="groups" class="q-mr-sm" /><strong>Público-alvo:</strong>
           {{ produto.publicoAlvo }}
         </div>
+        <div class="q-mb-md" v-if="produto.composicao">
+          <q-icon name="science" class="q-mr-sm" /><strong>Composição:</strong>
+          {{ produto.composicao }}
+        </div>
+        <div class="q-mb-md" v-if="produto.observacoes">
+          <q-icon name="note" class="q-mr-sm" /><strong>Observações:</strong>
+          {{ produto.observacoes }}
+        </div>
+
+        <!-- Histórico de Preços de Aquisição -->
+        <div class="q-mb-md" v-if="produto.precoCustoHistorico?.length">
+          <q-icon name="history" class="q-mr-sm" />
+          <strong>Histórico de Preços de Aquisição:</strong>
+          <q-list bordered class="q-mt-sm">
+            <q-item v-for="(item, index) in produto.precoCustoHistorico" :key="index">
+              <q-item-section>
+                {{ item.data }} - R$ {{ item.preco.toFixed(2) }} ({{ item.quantidade }} unidades)
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </div>
+
+        <!-- Histórico de Ajustes de Estoque -->
+        <div class="q-mb-md" v-if="produto.ajustesEstoqueHistorico?.length">
+          <q-icon name="edit_note" class="q-mr-sm" />
+          <strong>Histórico de Ajustes de Estoque:</strong>
+          <q-list bordered class="q-mt-sm">
+            <q-item v-for="(ajuste, index) in produto.ajustesEstoqueHistorico" :key="index">
+              <q-item-section>
+                {{ ajuste.data }} — Ajuste:
+                <span :class="ajuste.quantidade > 0 ? 'text-positive' : 'text-negative'">
+                  {{ ajuste.quantidade > 0 ? '+' : '' }}{{ ajuste.quantidade }}
+                </span>
+                <div v-if="ajuste.motivo" class="text-caption text-grey">
+                  Motivo: {{ ajuste.motivo }}
+                </div>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </div>
+
+        <!-- Imagem destacada -->
+        <div class="q-mb-md" v-if="produto.imagemMiniatura">
+          <div class="text-subtitle1 q-mb-sm">
+            <q-icon name="image" class="q-mr-sm" />
+            <strong>Imagem do Produto</strong>
+          </div>
+          <q-img
+            :src="produto.imagemMiniatura || placeholderImagem"
+            style="max-width: 300px; border-radius: 8px"
+            spinner-color="primary"
+            class="shadow-2"
+          />
+        </div>
       </q-card-section>
 
-      <!-- Composição e observações -->
-      <q-card-section v-if="produto.composicao">
-        <q-icon name="science" class="q-mr-sm" /> <strong>Composição:</strong>
-        <p>{{ produto.composicao }}</p>
-      </q-card-section>
-
-      <q-card-section v-if="produto.observacoes">
-        <q-icon name="note" class="q-mr-sm" /> <strong>Observações:</strong>
-        <p>{{ produto.observacoes }}</p>
-      </q-card-section>
-
-      <!-- Histórico de custo -->
-      <q-card-section v-if="produto.precoCustoHistorico?.length">
-        <q-icon name="history" class="q-mr-sm" /> <strong>Histórico de Preços de Aquisição:</strong>
-        <q-list bordered>
-          <q-item v-for="(item, index) in produto.precoCustoHistorico" :key="index">
-            <q-item-section>
-              {{ item.data }} - R$ {{ item.preco.toFixed(2) }} ({{ item.quantidade }} unidades)
-            </q-item-section>
-          </q-item>
-        </q-list>
+      <q-card-section v-else>
+        <div class="text-grey">Carregando produto...</div>
       </q-card-section>
     </q-card>
   </q-page>
@@ -101,5 +131,8 @@ function voltar() {
 <style scoped>
 .amatic-font {
   font-family: 'Amatic SC', cursive;
+}
+.text-h6 {
+  font-weight: bold;
 }
 </style>

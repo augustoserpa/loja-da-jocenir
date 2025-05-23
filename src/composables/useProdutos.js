@@ -76,6 +76,23 @@ export function useProdutos() {
     return produtos.value.find((p) => p.id === id) || null
   }
 
+  function ajustarEstoque(id, quantidade, motivo = '') {
+    const produto = produtos.value.find((p) => p.id === id)
+    if (!produto) return
+
+    produto.estoqueAtual += quantidade
+
+    if (!produto.ajustesEstoqueHistorico) {
+      produto.ajustesEstoqueHistorico = []
+    }
+
+    produto.ajustesEstoqueHistorico.push({
+      data: new Date().toISOString().split('T')[0],
+      quantidade,
+      motivo,
+    })
+  }
+
   return {
     produtos,
     listarProdutos,
@@ -83,5 +100,6 @@ export function useProdutos() {
     atualizarProduto,
     removerProduto,
     buscarProdutoPorId,
+    ajustarEstoque,
   }
 }

@@ -49,24 +49,37 @@
 
     <!-- Diálogo de ajuste de estoque -->
     <q-dialog v-model="mostrarDialogo">
-      <q-card style="min-width: 300px">
+      <q-card style="min-width: 320px">
         <q-card-section>
-          <div class="text-h6">Ajustar Estoque</div>
+          <div class="text-h6 amatic-font">Ajustar Estoque</div>
           <div class="text-caption text-negative q-mt-xs">
-            O valor digitado será somado (positivo) ou subtraído (negativo) do estoque atual.
+            O valor será somado (positivo) ou subtraído (negativo) do estoque atual.
           </div>
         </q-card-section>
+
         <q-card-section>
+          <q-input v-model.number="ajuste" type="number" filled dense label="Quantidade a ajustar">
+            <template v-slot:prepend>
+              <q-btn round dense flat icon="remove" @click="ajuste--" />
+            </template>
+            <template v-slot:append>
+              <q-btn round dense flat icon="add" @click="ajuste++" />
+            </template>
+          </q-input>
+
           <q-input
-            v-model.number="ajuste"
-            type="number"
-            label="Quantidade a ajustar"
+            v-model="motivo"
+            type="textarea"
             filled
             dense
+            label="Motivo do ajuste (opcional)"
+            class="q-mt-md"
+            autogrow
           />
         </q-card-section>
+
         <q-card-actions align="right">
-          <q-btn flat label="Cancelar" color="primary" v-close-popup />
+          <q-btn flat label="Cancelar" color="negative" v-close-popup />
           <q-btn flat label="Confirmar" color="primary" @click="confirmarAjuste" />
         </q-card-actions>
       </q-card>
@@ -105,7 +118,20 @@ function confirmarAjuste() {
 </script>
 
 <style scoped>
+/* Remove as flechinhas do input de número em navegadores */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type='number'] {
+  -moz-appearance: textfield; /* Firefox */
+  appearance: textfield;
+}
 .text-h6 {
   font-weight: bold;
+}
+.amatic-font {
+  font-family: 'Amatic SC', cursive;
 }
 </style>
